@@ -1,0 +1,34 @@
+import socket
+import matplotlib.pyplot as plt
+
+
+serverName = 'localhost'
+serverPort = 12001
+
+clientSocket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+clientSocket.connect((serverName, serverPort))
+
+
+plt.ion()  
+plt.xlabel("Zaman (saniye)")
+plt.ylabel("Sayı")
+plt.title("Gerçek Zamanlı Sayı Çizimi")
+
+x_koordinat = []
+y_koordinat = []
+
+while True:
+    data = clientSocket.recv(1024).decode()  
+    if not data: 
+        break
+
+    number = float(data)  
+    x_koordinat.append(len(x_koordinat))  
+    y_koordinat.append(number)  
+
+    plt.plot(x_koordinat,y_koordinat, 'bo-')  
+    plt.pause(0.1)  
+
+clientSocket.close()
+plt.ioff()  
+plt.show()
