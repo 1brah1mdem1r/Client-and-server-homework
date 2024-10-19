@@ -1,0 +1,27 @@
+from socket import *
+import threading
+
+def handle_client(client_socket, other_socket):
+    while True:
+        data = client_socket.recv(1024)
+        if not data:
+            break
+        other_socket.send(data)  # Diğer istemciye ilet
+
+    client_socket.close()
+
+
+serverPort = 12001
+serverSocket = socket(AF_INET, SOCK_STREAM)
+serverSocket.bind(('', serverPort))
+serverSocket.listen(2)
+print("Sunucu almak için hazır")
+
+client1, addr1 = serverSocket.accept()
+print(f"istemci 1 bağlandı: {addr1}")
+
+client2, addr2 = serverSocket.accept()
+print(f"istemci 2 bağlandı: {addr2}")
+
+threading.Thread(target=handle_client, args=(client1, client2)).start()
+threading.Thread(target=handle_client, args=(client2, client1)).start()
