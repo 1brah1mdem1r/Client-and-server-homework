@@ -1,0 +1,17 @@
+import socket
+import random
+import time
+
+serverName = 'localhost'  
+serverPort = 12001        
+
+clientSocket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)  
+clientSocket.connect((serverName, serverPort))  
+
+while True:
+    number = random.uniform(1, 100)  
+    clientSocket.send(str(number).encode())  
+    print(f"İstemci sunucuya gönderdi: {number}") 
+    time.sleep(1)  
+
+clientSocket.close()  
